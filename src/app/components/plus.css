@@ -2,11 +2,8 @@
 
 body{
     height:100vh;
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    width:100%;
 }
+
 
 .pd-box{
     padding:var(--pd)
@@ -14,7 +11,15 @@ body{
 
 .box-content{
     border: 1px solid #e9ecef;
-    padding: var(--pd);}
+    padding: var(--pd);
+}
+
+
+.box-wrap  {
+    width: 70%;
+    margin: auto;
+    margin-top:100px;
+}
 
 .edge-input{
     border: 2px solid #e9ecef;
@@ -204,7 +209,15 @@ table.order-detail td {
 .h-35{
     height:35px;
 }
+
+.mh-400,.table-scroll{
+    max-height:400px
+}
+
 .table-scroll{
     overflow:auto;
-    max-height:400px;
+}
+
+.overflow-auto{
+    overflow:auto;
 }

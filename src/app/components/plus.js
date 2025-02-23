@@ -64,17 +64,13 @@ function Plus() {
     () => {
       setTimeout(() => {
         let sum = storeItem.reduce((accumulator, currentValue) => {
-          console.log(currentValue, "currentValue");
           if (currentValue["codeProduct"] && currentValue["qty"] && currentValue["pricePerUnit"] && currentValue["unit"]) {
-            console.log("TRUE");
             return parseFloat(accumulator || 0) + parseFloat(currentValue["beforeDiscount"] || 0);
           } else {
-            console.log("FALSE");
             return accumulator;
           }
         }, 0);
         let sumDiscount = storeItem.reduce((accumulator, currentValue) => {
-          console.log(currentValue, "currentValue");
           if (currentValue["codeProduct"] && currentValue["qty"] && currentValue["pricePerUnit"] && currentValue["unit"]) {
             return (
               parseFloat(accumulator || 0) +
@@ -88,7 +84,6 @@ function Plus() {
 
 
         let sumNetAfterDiscount = storeItem.reduce((accumulator, currentValue) => {
-          console.log(currentValue, "currentValue");
           if (currentValue["codeProduct"] && currentValue["qty"] && currentValue["pricePerUnit"] && currentValue["unit"]) {
             return (
               parseFloat(accumulator || 0) + (parseFloat(currentValue["priceNet"] ))
@@ -131,11 +126,9 @@ function Plus() {
         let sumPrice =
           (key == "qty" ? inputValue : parseFloat(item["qty"])) *
             (key == "pricePerUnit" ? parseFloat(inputValue) : parseFloat(item["pricePerUnit"])) || 0;
-        console.log(sumPrice, "sumPrice");
         item["beforeDiscount"] = sumPrice;
         if (item["discount"] || (key == "discount" && inputValue)) {
           let discount = ((sumPrice * (key == "discount" ? inputValue : parseFloat(item["discount"]))) / 100).toFixed(2);
-          console.log(discount, "discount");
           item["priceNet"] = sumPrice - discount || 0;
         } else {
           item["priceNet"] = sumPrice;
@@ -228,13 +221,15 @@ function Plus() {
     setStoreItem(newItems); // อัปเดต state
   };
   const deleteOrder = index => {
-    const newItems = storeOrder.filter((_, i) => i !== index);
-    setStoreOrder(newItems);
+    if(confirm("ยืนยันลบออเดอร์")){
+      const newItems = storeOrder.filter((_, i) => i !== index);
+      setStoreOrder(newItems);
+    }
+
   };
 
   const updateOrder = index => {
     let orderUpdate = [...storeOrder];
-    console.log(orderUpdate[index]);
     setIndexUpdate(index)
     setStatusUpdate(true);
     setStoreItem([...orderUpdate[index].storeItem])
@@ -244,27 +239,24 @@ function Plus() {
   };
 
   const updateOrderConfirm = ()=>{
-    console.log('updateOrderConfirm');
-    console.log(indexUpdate);
     let index = indexUpdate;
     let orderItem =  [...storeOrder]
-      orderItem[index].storeItem = [...storeItem]
-      orderItem[index].objDetail = {...objDetail}
-      orderItem[index].note = note
-      orderItem[index].remark = remark 
-      orderItem[index].priceNet = priceNet
-      orderItem[index].discountNet = discountNet
-      orderItem[index].netSumFinal = netSumFinal
-      orderItem[index].vatSumPrice = vatSumPrice
-      orderItem[index].grandTotal = grandTotal
-      console.log(orderItem,'orderItem-final');
+    orderItem[index].storeItem = [...storeItem]
+    orderItem[index].objDetail = {...objDetail}
+    orderItem[index].note = note
+    orderItem[index].remark = remark 
+    orderItem[index].priceNet = priceNet
+    orderItem[index].discountNet = discountNet
+    orderItem[index].netSumFinal = netSumFinal
+    orderItem[index].vatSumPrice = vatSumPrice
+    orderItem[index].grandTotal = grandTotal
     setStoreOrder([...orderItem])
     loadFirst();
   }
 
   return (
     <>
-      <div className="box-content">
+      <div className="box-content overflow-auto">
         <div className="w-60-percent">
           <div className="box-product ">
             <input
@@ -327,16 +319,19 @@ function Plus() {
         <div className="box-content w-60-percent bt-none br-none table-scroll">
           <div className="box-product">
             <p className=" me-auto">
-              <span className="title-product me-3"> รายการสินค้า </span>
-              <span className="remain-cal">
-                *สินค้าจะถูกคำนวณเมื่อมีข้อมูล รหัสสินค้า,จำนวน,ราคาหน่วย,หน่วย,ส่วนลดถ้าไม่ใส่จะเป็น 0{" "}
-              </span>
+              <span className="title-product"> รายการสินค้า </span>
             </p>
+            
 
-            <button className="pd-number bd-none btn-color" onClick={addProduct}>
+            <button className="pd-number bd-none btn-color text-nowrap" onClick={addProduct}>
               เพิ่มสินค้า
             </button>
           </div>
+
+          <p className="remain-cal">
+              *สินค้าจะถูกคำนวณเมื่อมีข้อมูล รหัสสินค้า,จำนวน,ราคาหน่วย,หน่วย,ส่วนลดถ้าไม่ใส่จะเป็น 0{" "}
+          </p>
+
 
           <table>
             <thead>
@@ -433,7 +428,7 @@ function Plus() {
             />
           </div>
         </div>
-        <div className="box-content w-40-percent bt-none">
+        <div className="box-content w-40-percent bt-none overflow-auto mh-400">
           <p className="title-product me-auto">รายการสินค้า</p>
 
           <div className="box-product align-items-center ms-3">
